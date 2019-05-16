@@ -1,5 +1,5 @@
 {
-  "name": "dongyueweb/oauth2-jaccount",
+  "name": "dyweb/oauth2-jaccount",
   "description": "jAccount OAuth 2.0 support for the PHP League's OAuth 2.0 Client",
   "license": "MIT",
   "authors": [
@@ -27,12 +27,12 @@
   },
   "autoload": {
     "psr-4": {
-      "DongyueWeb\\OAuth2\\Client\\": "src/"
+      "Dyweb\\OAuth2\\Client\\": "src/"
     }
   },
   "autoload-dev": {
     "psr-4": {
-      "DongyueWeb\\OAuth2\\Client\\Test\\": "tests/src/"
+      "Dyweb\\OAuth2\\Client\\Test\\": "tests/src/"
     }
   }
 }

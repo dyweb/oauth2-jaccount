@@ -5,13 +5,13 @@ This package provides JAccount OAuth 2.0 support for the PHP League's [OAuth 2.0
 ## Installation
 
 ```
-composer require dongyueweb/oauth2-jaccount
+composer require dyweb/oauth2-jaccount
 ```
 
 ## Usage
 
 ```php
-$jaccountProvider = new \DongyueWeb\OAuth2\Client\Provider\JAccount([
+$jaccountProvider = new \Dyweb\OAuth2\Client\Provider\JAccount([
     'clientId'                => 'yourId',          // The client ID assigned to you by NIC
     'clientSecret'            => 'yourSecret',      // The client password assigned to you by NIC
     'redirectUri'             => 'yourRedirectUri'  // The return URL you specified for your app on NIC

@@ -1,6 +1,6 @@
 <?php
 
-namespace DongyueWeb\OAuth2\Client\Provider;
+namespace Dyweb\OAuth2\Client\Provider;
 
 use League\OAuth2\Client\Provider\AbstractProvider;
 use Psr\Http\Message\ResponseInterface;
