@@ -1,0 +1,38 @@
+{
+  "name": "dongyueweb/oauth2-jaccount",
+  "description": "jAccount OAuth 2.0 support for the PHP League's OAuth 2.0 Client",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Bingchang He",
+      "email": "hebingchang@sjtu.edu.cn"
+    }
+  ],
+  "keywords": [
+    "php",
+    "jaccount",
+    "api",
+    "oauth",
+    "oauth2",
+    "client",
+    "authorization",
+    "authentication"
+  ],
+  "require": {
+    "league/oauth2-client": "^2.0"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "~4.0",
+    "mockery/mockery": "~0.9"
+  },
+  "autoload": {
+    "psr-4": {
+      "DongyueWeb\\OAuth2\\Client\\": "src/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "DongyueWeb\\OAuth2\\Client\\Test\\": "tests/src/"
+    }
+  }
+}
