@@ -77,11 +77,12 @@ class JAccount extends AbstractProvider
      */
     protected function checkResponse(ResponseInterface $response, $data)
     {
-        if (isset($data['error'])) {
+        if ($data['errno'] != 0) {
             $statusCode = $response->getStatusCode();
+            $errno = $data['errno'];
             $error = $data['error'];
             throw new IdentityProviderException(
-                $statusCode . ' - ' . $error,
+                $statusCode . ' - ' . $errno . ': ' . $error,
                 $response->getStatusCode(),
                 $response
             );
