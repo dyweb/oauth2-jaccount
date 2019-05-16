@@ -11,72 +11,69 @@ composer require dyweb/oauth2-jaccount
 ## Usage
 
 ```php
-$jaccountProvider = new \Dyweb\OAuth2\Client\Provider\JAccount([
+$provider = new \Dyweb\OAuth2\Client\Provider\JAccount([
     'clientId'                => 'yourId',          // The client ID assigned to you by NIC
     'clientSecret'            => 'yourSecret',      // The client password assigned to you by NIC
-    'redirectUri'             => 'yourRedirectUri'  // The return URL you specified for your app on NIC
+    'redirectUri'             => 'yourUrl'          // The return URL you specified for your app on NIC
 ]);
 
-// Get authorization code
+// If we don't have an authorization code then get one
 if (!isset($_GET['code'])) {
-    // Options are optional, defaults to ['profile']
-    $options = ['basic'];
-    // Get authorization URL
-    $authorizationUrl = $amazonProvider->getAuthorizationUrl($options);
 
-    // Get state and store it to the session
-    $_SESSION['oauth2state'] = $amazonProvider->getState();
+    // Fetch the authorization URL from the provider; this returns the
+    // urlAuthorize option and generates and applies any necessary parameters
+    // (e.g. state).
+    $authorizationUrl = $provider->getAuthorizationUrl();
 
-    // Redirect user to authorization URL
+    // Get the state generated for you and store it to the session.
+    $_SESSION['oauth2state'] = $provider->getState();
+
+    // Redirect the user to the authorization URL.
     header('Location: ' . $authorizationUrl);
     exit;
-// Check for errors
+
+// Check given state against previously stored one to mitigate CSRF attack
 } elseif (empty($_GET['state']) || (isset($_SESSION['oauth2state']) && $_GET['state'] !== $_SESSION['oauth2state'])) {
+
     if (isset($_SESSION['oauth2state'])) {
         unset($_SESSION['oauth2state']);
     }
+
     exit('Invalid state');
+
 } else {
-    // Get access token
+
     try {
-        $accessToken = $amazonProvider->getAccessToken(
-            'authorization_code',
-            [
-                'code' => $_GET['code']
-            ]
-        );
+
+        // Try to get an access token using the authorization code grant.
+        $accessToken = $provider->getAccessToken('authorization_code', [
+            'code' => $_GET['code']
+        ]);
+
+        // We have an access token, which we may use in authenticated
+        // requests against the service provider's API.
+        echo 'Access Token: ' . $accessToken->getToken() . "<br>";
+        echo 'Refresh Token: ' . $accessToken->getRefreshToken() . "<br>";
+        echo 'Expired in: ' . $accessToken->getExpires() . "<br>";
+        echo 'Already expired? ' . ($accessToken->hasExpired() ? 'expired' : 'not expired') . "<br>";
+
+        // Using the access token, we may look up details about the
+        // resource owner.
+        $resourceOwner = $provider->getResourceOwner($accessToken);
+
+        var_export($resourceOwner->toArray());
+
     } catch (\League\OAuth2\Client\Provider\Exception\IdentityProviderException $e) {
+
+        // Failed to get the access token or user details.
         exit($e->getMessage());
+
     }
 
-    // Get resource owner
-    try {
-        $resourceOwner = $amazonProvider->getResourceOwner($accessToken);
-    } catch (\League\OAuth2\Client\Provider\Exception\IdentityProviderException $e) {
-        exit($e->getMessage());
-    }
-        
-    // Now you can store the results to session etc.
-    $_SESSION['accessToken'] = $accessToken;
-    $_SESSION['resourceOwner'] = $resourceOwner;
-    
-    var_dump(
-        $resourceOwner->getId(),
-        $resourceOwner->getName(),
-        $resourceOwner->getPostalCode(),
-        $resourceOwner->getEmail(),
-        $resourceOwner->toArray()
-    );
 }
 ```
 
 For more information see the PHP League's general usage examples.
-
-## Testing
-
-``` bash
-$ ./vendor/bin/phpunit
-```
 
 ## License
 
